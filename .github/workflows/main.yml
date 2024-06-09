@@ -1,0 +1,31 @@
+name: github pages
+
+on:
+  push:
+    branches:
+    - master
+  schedule:
+    - cron: 0 12 * * *
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+    
+    steps:
+    - uses: actions/checkout@v1
+    
+    - name: Install dependencies
+      run: pip install -r requirements.txt 
+    
+    - name: AGoodMovieToWatch
+      run: ./run.sh
+    
+    - name: Publish
+      uses: peaceiris/actions-gh-pages@v2
+      env:
+        ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        PUBLISH_BRANCH: gh-pages
+        PUBLISH_DIR: ./publish
